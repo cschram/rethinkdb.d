@@ -1,0 +1,11 @@
+{
+	"name": "rethinkdb-d",
+	"description": "RethinkDB Driver D, built on vibe.d.",
+	"copyright": "Copyright © 2016, Corey Schram",
+	"authors": ["Corey Schram <coreyschram@gmail.com>"],
+	"targetType": "library",
+	"dependencies": {
+		"vibe-d": "~>0.7.27",
+		"dproto": "~>1.3.2"
+	}
+}

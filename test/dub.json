@@ -1,0 +1,9 @@
+{
+	"name": "rethinkdb-test",
+	"description": "RethinkDB driver test suite.",
+	"dependencies": {
+		"vibe-d": "~>0.7.27",
+		"rethinkdb-d": {"version": "~master", "path": "../"}
+	},
+	"versions": ["VibeCustomMain"]
+}
