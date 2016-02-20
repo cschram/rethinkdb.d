@@ -10,6 +10,7 @@ void runTest()
 	auto conn = pool.lockConnection();
 	scope (exit) conn.disconnect();
 	assert(conn.connected);
+	logInfo("Test");
 }
 
 void main()
