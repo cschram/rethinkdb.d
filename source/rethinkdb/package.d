@@ -31,7 +31,6 @@ unittest
         auto pool = r.connection().connect();
         auto conn = pool.lockConnection();
         scope (exit) conn.disconnect();
-
         testQuery(r, conn);
     }
 

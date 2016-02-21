@@ -135,7 +135,7 @@ final class RethinkConnection
 			throw new RethinkConnectionException((cast(char[])resp).to!string);
 		}
 		logInfo("Connected to RethinkDB server %s:%s", settings.host, settings.port);
-		readLoop();
+		m_loop = runTask(&readLoop);
 	}
 
 	~this()
@@ -158,7 +158,7 @@ final class RethinkConnection
 
 	@property bool connected() const { return m_transport && m_transport.connected; }
 
-	void runQuery(Json query, QueryResp onResp)
+	void runQuery(Json query, scope QueryResp onResp)
 	{
 		assert(connected, "Attempted to run query without connection");
 		auto id = ++m_counter;
@@ -179,26 +179,25 @@ private:
 	const(ConnectionSettings) m_settings;
 	TCPConnection m_transport;
 	Stream m_stream;
+	Task m_loop;
 	ulong m_counter;
 	QueryResp[ulong] m_handlers;
 
 	void readLoop()
 	{
-		runTask({
-			while(connected) {
-				if (m_stream.dataAvailableForRead()) {
-					ubyte[12] header;
-					m_stream.read(header);
-					auto id = fromBytes!ulong(header[0 .. 8]);
-					auto size = fromBytes!uint(header[8 .. $]);
-					assert(id in m_handlers, "Unexpected message");
-					ubyte[] buf = new ubyte[size];
-					m_stream.read(buf);
-					m_handlers[id](parseJsonString((cast(char[])buf).to!string));
-					m_handlers.remove(id);
-				}
-				yield();
+		while(connected) {
+			if (m_stream.dataAvailableForRead()) {
+				ubyte[12] header;
+				m_stream.read(header);
+				auto id = fromBytes!ulong(header[0 .. 8]);
+				auto size = fromBytes!uint(header[8 .. $]);
+				assert(id in m_handlers, "Unexpected message");
+				ubyte[] buf = new ubyte[size];
+				m_stream.read(buf);
+				m_handlers[id](parseJsonString((cast(char[])buf).to!string));
+				m_handlers.remove(id);
 			}
-		});
+			yield();
+		}
 	}
 }
