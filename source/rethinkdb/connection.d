@@ -184,20 +184,21 @@ private:
 
 	void readLoop()
 	{
-		while(connected) {
-			if (m_stream.dataAvailableForRead()) {
-				ubyte[12] header;
-				m_stream.read(header);
-				auto id = fromBytes!ulong(header[0 .. 8]);
-				auto size = fromBytes!uint(header[8 .. $]);
-				assert(id in m_handlers, "Unexpected message");
-				ubyte[] buf = new ubyte[size];
-				m_stream.read(buf);
-				m_handlers[id](parseJsonString((cast(char[])buf).to!string));
-				m_handlers.remove(id);
+		runTask({
+			while(connected) {
+				if (m_stream.dataAvailableForRead()) {
+					ubyte[12] header;
+					m_stream.read(header);
+					auto id = fromBytes!ulong(header[0 .. 8]);
+					auto size = fromBytes!uint(header[8 .. $]);
+					assert(id in m_handlers, "Unexpected message");
+					ubyte[] buf = new ubyte[size];
+					m_stream.read(buf);
+					m_handlers[id](parseJsonString((cast(char[])buf).to!string));
+					m_handlers.remove(id);
+				}
+				yield();
 			}
-			yield();
-		}
-		logInfo("Exiting connection loop");
+		});
 	}
 }
