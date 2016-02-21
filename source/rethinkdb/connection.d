@@ -117,11 +117,11 @@ final class RethinkConnection
 		m_transport = connectTCP(settings.host, settings.port);
 		scope(failure) m_transport.close();
 		m_transport.readTimeout = settings.timeout;
-		assert(m_transport.connected);
+		assert(m_transport.connected, "Connection failed");
 		m_stream = m_transport; // When SSL support is added this will be a SSL stream when applicable
 
 		// Initiate handshake
-		uint size = settings.key.length;
+		uint size = cast(uint)settings.key.length;
 		ubyte[] handshake = new ubyte[12 + size];
 		handshake[0 .. 4] = toBytes!uint(ql.VersionDummy.Version.V0_4);
 		handshake[4 .. 8] = toBytes!uint(size);
@@ -160,10 +160,10 @@ final class RethinkConnection
 
 	void runQuery(Json query, QueryResp onResp)
 	{
-		assert(connected);
+		assert(connected, "Attempted to run query without connection");
 		auto id = ++m_counter;
 		auto queryStr = query.toString();
-		uint queryLen = queryStr.length;
+		uint queryLen = cast(uint)queryStr.length;
 
 		m_handlers[id] = onResp;
 
@@ -184,17 +184,18 @@ private:
 
 	void readLoop()
 	{
-		logInfo("Entering connection loop");
 		while(connected) {
-			ubyte[12] header;
-			m_stream.read(header);
-			auto id = fromBytes!ulong(header[0 .. 8]);
-			auto size = fromBytes!uint(header[8 .. $]);
-			assert(id in m_handlers);
-			ubyte[] buf = new ubyte[size];
-			m_stream.read(buf);
-			m_handlers[id](parseJsonString((cast(char[])buf).to!string));
-			m_handlers.remove(id);
+			if (m_stream.dataAvailableForRead()) {
+				ubyte[12] header;
+				m_stream.read(header);
+				auto id = fromBytes!ulong(header[0 .. 8]);
+				auto size = fromBytes!uint(header[8 .. $]);
+				assert(id in m_handlers, "Unexpected message");
+				ubyte[] buf = new ubyte[size];
+				m_stream.read(buf);
+				m_handlers[id](parseJsonString((cast(char[])buf).to!string));
+				m_handlers.remove(id);
+			}
 			yield();
 		}
 		logInfo("Exiting connection loop");

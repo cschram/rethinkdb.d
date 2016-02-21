@@ -1,0 +1,516 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"Conn",
+				"ConnectionSettings"
+			],
+			[
+				"wat",
+				"watchify"
+			],
+			[
+				"isn",
+				"instantiated"
+			],
+			[
+				"explo",
+				"explosionSpawn"
+			],
+			[
+				"expl",
+				"explosionSpawn"
+			],
+			[
+				"target",
+				"targetPhysics"
+			],
+			[
+				"ENtity",
+				"EntityManager"
+			],
+			[
+				"ve",
+				"vertex"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "dub.json",
+			"settings":
+			{
+				"buffer_size": 314,
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": ".sublime-build",
+			"settings":
+			{
+				"buffer_size": 87,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/DKit/D.sublime-build",
+					""
+				],
+				[
+					"Packages/DKit/D.sublime-build",
+					"Run"
+				],
+				[
+					"Packages/DKit/D.sublime-build",
+					"dub"
+				]
+			],
+			[
+				"Packages/DKit/D.sublime-build",
+				"dub"
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 354.0,
+		"last_filter": "insta",
+		"selected_items":
+		[
+			[
+				"insta",
+				"Package Control: Install Package"
+			],
+			[
+				"json",
+				"Pretty JSON: Format (Pretty Print) JSON"
+			],
+			[
+				"instal",
+				"Package Control: Install Package"
+			],
+			[
+				"inst",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 458.0
+	},
+	"console":
+	{
+		"height": 126.0,
+		"history":
+		[
+			"os.environ['PATH']",
+			"import os",
+			"os.environ['PATH']",
+			"import os",
+			"os.environ['PATH']",
+			"import os",
+			"os.environ['PATH']",
+			"import os",
+			"sys.path",
+			"import sys",
+			"import urllib.request,os,hashlib; h = 'eb2297e1a458f27d836c04bb0cbaf282' + 'd0e7a3098092775ccb37ca9d6b2e4b7d'; pf = 'Package Control.sublime-package'; ipp = sublime.installed_packages_path(); urllib.request.install_opener( urllib.request.build_opener( urllib.request.ProxyHandler()) ); by = urllib.request.urlopen( 'http://packagecontrol.io/' + pf.replace(' ', '%20')).read(); dh = hashlib.sha256(by).hexdigest(); print('Error validating download (got %s instead of %s), please try manual install' % (dh, h)) if dh != h else open(os.path.join( ipp, pf), 'wb' ).write(by)"
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"expanded_folders":
+	[
+		"/Users/corey/projects/misc/rethinkdb.d",
+		"/Users/corey/projects/misc/rethinkdb.d/source"
+	],
+	"file_history":
+	[
+		"/Users/corey/projects/hasbro/streaming_auth/js/token.js",
+		"/Users/corey/projects/hasbro/streaming_auth/js/main.js",
+		"/Users/corey/Library/Application Support/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/Users/corey/projects/misc/chat-experiment/server/src/index.js",
+		"/Users/corey/projects/misc/chat-experiment/server/src/db.js",
+		"/Users/corey/projects/misc/chat-experiment/scripts/create-db",
+		"/Users/corey/projects/misc/chat-experiment/config/server.example.json",
+		"/Users/corey/projects/misc/chat-experiment/server/package.json",
+		"/Users/corey/projects/misc/chat-experiment/server/src/logger.js",
+		"/Users/corey/projects/misc/chat-experiment/client/package.json",
+		"/Users/corey/projects/misc/chat-experiment/config/db.json",
+		"/E/projects/push-chat/client/package.json",
+		"/E/projects/push-chat/client/gulpfile.js",
+		"/E/projects/push-chat/client/.babelrc",
+		"/E/projects/push-chat/server/package.json",
+		"/E/projects/push-chat/server/src/logger.js",
+		"/E/projects/push-chat/scripts/create-db",
+		"/E/projects/push-chat/server/src/db.js",
+		"/E/projects/cac/server/config.yml",
+		"/E/projects/push-chat/config/db.json",
+		"/E/projects/cac/server/scripts/create-db",
+		"/E/projects/push-chat/config/db.example.json",
+		"/E/projects/cac/server/src/db.js",
+		"/E/projects/cac/server/src/index.js",
+		"/E/projects/cac/client/app/index.js",
+		"/E/projects/athenahealth-coding-problem/wordvalue.js",
+		"/E/Dropbox/Camera Uploads/.dropbox",
+		"/E/projects/cac/client/package.json",
+		"/E/projects/cac/client/config.example.json",
+		"/E/projects/cac/client/config.json",
+		"/E/projects/cac/client/gulpfile.js",
+		"/E/projects/cac/client/.babelrc",
+		"/E/projects/cac/client/dist/bundle.min.js.map",
+		"/E/projects/cac/client/scss/style.scss",
+		"/E/projects/cac/client/index.html",
+		"/E/projects/cah/config.yml",
+		"/E/projects/cah/scripts/create-db",
+		"/E/projects/cah/.gitignore",
+		"/E/projects/cah/package.json",
+		"/E/projects/cah/docs/schema.md",
+		"/E/projects/cah/src/server/logger.js",
+		"/E/projects/cah/src/server/index.js",
+		"/E/projects/cah/config.example.yml",
+		"/E/projects/cah/src/server/config.js",
+		"/E/projects/cah/scripts/populate-db",
+		"/E/projects/cah/public/index.html",
+		"/E/projects/cah/README.md",
+		"/E/projects/cah/scripts/format-data",
+		"/E/projects/cah/data/raw.json",
+		"/E/projects/cah/data/dbset.json",
+		"/E/projects/cah/data.json",
+		"/E/projects/cah/new-data.json",
+		"/E/projects/cah/dump.json",
+		"/C/Users/corey/AppData/Roaming/Sublime Text 3/Packages/User/Preferences.sublime-settings",
+		"/E/projects/dspace/src/engine/game.d",
+		"/E/projects/dspace/src/dspace/states/startmenu.d",
+		"/E/projects/dspace/src/dspace/states/playing.d",
+		"/E/projects/dspace/src/dspace/states/gameover.d",
+		"/E/projects/dspace/src/dspace/dspace.d",
+		"/E/Dropbox/VisualBoyAdvance/vba.ini",
+		"/E/Dropbox/VisualBoyAdvance/VisualBoyAdvance.cfg",
+		"/E/projects/dspace/src/engine/world.d",
+		"/E/projects/dspace/src/dspace/assemblies/seraph.d",
+		"/E/projects/dspace/src/dspace/assemblies/player.d",
+		"/E/projects/dspace/src/dspace/assemblies/explosion.d",
+		"/E/projects/dspace/src/dspace/assemblies/drone.d",
+		"/E/projects/dspace/src/dspace/assemblies/bullet.d",
+		"/E/projects/dspace/src/engine/systems/physics.d",
+		"/E/projects/dspace/src/engine/systems/render.d",
+		"/E/projects/dspace/src/engine/configmgr.d",
+		"/E/projects/dspace/src/engine/resourcemgr.d",
+		"/E/projects/dspace/src/engine/spawn/spawner.d",
+		"/E/projects/dspace/src/dspace/controllers/spawnzone.d",
+		"/E/projects/dspace/src/dspace/spawners/drone.d",
+		"/E/projects/dspace/src/dspace/spawners/seraph.d",
+		"/E/projects/dspace/src/dspace/spawners/enemy.d",
+		"/E/projects/dspace/src/dspace/controllers/enemy.d",
+		"/E/projects/dspace/src/engine/components/physics.d",
+		"/E/projects/dspace/src/engine/spawn/timedarea.d",
+		"/E/projects/dspace/src/engine/quadtree.d",
+		"/E/projects/dspace/src/engine/util.d",
+		"/E/projects/dspace/src/app.d",
+		"/E/projects/dspace/src/engine/spawn/area.d",
+		"/E/projects/dspace/src/engine/cache.d",
+		"/E/projects/dspace/src/dspace/controllers/player.d",
+		"/C/PRO64_90_0/PRO64_Data/Managed/UnityEngine.xml",
+		"/E/projects/dspace/content/anim/player.animset",
+		"/E/projects/dspace/src/engine/graphics/animationset.d",
+		"/E/projects/dspace/src/engine/graphics/animation.d",
+		"/E/projects/dspace/src/engine/graphics/spritesheet.d",
+		"/E/projects/dspace/src/dspace/spawners/explosion.d",
+		"/E/projects/dspace/src/engine/util/cache.d",
+		"/E/projects/dspace/content/anim/explosion.anim",
+		"/E/projects/dspace/src/dspace/controllers/animation.d",
+		"/E/projects/dspace/src/dspace/controllers/bullet.d",
+		"/E/projects/dspace/src/dspace/spawners/bullet.d",
+		"/E/projects/dspace/dub.selections.json",
+		"/E/projects/dspace/dub.json",
+		"/E/projects/dspace/src/engine/components/position.d",
+		"/E/projects/dspace/src/dspace/components/playerstate.d",
+		"/E/projects/dspace/src/engine/systems/controller.d",
+		"/E/projects/dspace/src/engine/components/controller.d",
+		"/E/projects/dspace/src/engine/controller.d",
+		"/E/projects/dspace/src/dspace/components/enemystate.d",
+		"/E/projects/dspace/README.md",
+		"/E/projects/dspace/LICENSE",
+		"/E/projects/dspace/src/engine/components/velocity.d",
+		"/E/projects/dspace/src/engine/components/bounds.d",
+		"/E/projects/dspace/src/engine/components/renderable.d",
+		"/E/projects/dspace/src/engine/states/manager.d",
+		"/E/projects/dspace/src/engine/states/idle.d",
+		"/E/projects/dspace/src/engine/states/state.d",
+		"/E/projects/dspace/src/engine/collision/body.d",
+		"/E/projects/dspace/src/main.d",
+		"/E/projects/dspace/src/dspace/core/collision/quadtree.d",
+		"/E/projects/dspace/src/dspace/core/collision/vector.d",
+		"/E/projects/dspace/src/dspace/core/collision/projection.d",
+		"/E/projects/dspace/src/dspace/core/collision/shape.d",
+		"/E/projects/dspace/src/dspace/core/collision/rect.d",
+		"/E/projects/dspace/src/dspace/core/collision/body.d",
+		"/E/projects/dspace/.gitignore",
+		"/E/projects/dspace/src/dspace/core/shape.d",
+		"/E/projects/dspace/src/dspace/core/vector.d",
+		"/E/projects/dspace/src/dspace/core/quadtree.d",
+		"/E/projects/dspace/src/dspace/core/game.d",
+		"/E/projects/dspace/src/dspace/systems/collision.d",
+		"/C/Users/corey/AppData/Roaming/Sublime Text 3/Packages/Default/Preferences.sublime-settings"
+	],
+	"find":
+	{
+		"height": 25.0
+	},
+	"find_in_files":
+	{
+		"height": 158.0,
+		"where_history":
+		[
+			"E:\\projects\\dspace\\src"
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": true,
+		"find_history":
+		[
+			"\"",
+			"\"CAHe3\"",
+			"\"CAHe2\"",
+			"\"CAHe1\"",
+			"\"Base\"",
+			"scrollSpeed",
+			"SERAPH_MAX_HEALTH",
+			"SERAPH_SPRITE_NAME",
+			"SERAPH_SPEED",
+			"SERAPH_SIZE",
+			"PLAYER_ANIM_NAME",
+			"PLAYER_SIZE",
+			"EXPLOSION_ANIMATION_NAME",
+			"DRONE_MAX_HEALTH",
+			"DRONE_SPRITE_NAME",
+			"DRONE_SPEED",
+			"drone_SPEED",
+			"DRONE_SIZE",
+			"BULLET_SPRITE_NAME",
+			"BULLET_SIZE",
+			"BULLET_SPEED",
+			"dstring",
+			"getAnimation",
+			"spriteCache",
+			"maxObjects",
+			"children",
+			"T[]",
+			".top",
+			".left",
+			"FloatRect",
+			"entities",
+			"Entity"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"'",
+			"\"expansion3\"",
+			"\"expansion2\"",
+			"\"expansion1\"",
+			"\"base\"",
+			"SCROLL_SPEED",
+			"seraphMaxHP",
+			"seraphSpriteName",
+			"seraphSpeed",
+			"seraphSize",
+			"playerAnimName",
+			"playerSize",
+			"explosionAnimName",
+			"droneMaxHP",
+			"droneSpriteName",
+			"droneSpeed",
+			"droneSize",
+			"bulletSpriteName",
+			"bulletSize",
+			"bulletSpeed",
+			"string",
+			"textureCache",
+			"maxChildren",
+			"objects",
+			"Body[]",
+			".y",
+			".x",
+			"Rect",
+			"children",
+			"T"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": false,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 1,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "dub.json",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 314,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								0,
+								0
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/JavaScriptNext - ES6 Syntax/JSON (JavaScriptNext).tmLanguage",
+							"translate_tabs_to_spaces": false
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": ".sublime-build",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 87,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								86,
+								86
+							]
+						],
+						"settings":
+						{
+							"syntax": "Packages/Text/Plain text.tmLanguage"
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 25.0
+	},
+	"input":
+	{
+		"height": 66.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 120.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"pinned_build_system": "Packages/DKit/D.sublime-build",
+	"project": "rethinkdb-d.sublime-project",
+	"replace":
+	{
+		"height": 46.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 500.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 380.0
+	},
+	"select_symbol":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": true,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 244.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}

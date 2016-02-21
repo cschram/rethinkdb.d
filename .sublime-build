@@ -1,0 +1,5 @@
+{
+    "cmd": ["dub", "--compiler=ldc2", "-b", "unittest"],
+    "working_dir": "$folder/test",
+    "syntax": true
+}
