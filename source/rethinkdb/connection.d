@@ -13,29 +13,11 @@ import vibe.core.net;
 import vibe.data.json;
 import vibe.stream.operations;
 
-import ql = rethinkdb.ql2;
 import rethinkdb.client;
 import rethinkdb.exception;
-
-private union ByteSwapper(T)
-{
-	Unqual!T value;
-	ubyte[T.sizeof] array;
-}
-
-private auto toBytes(T)(T val)
-{
-	ByteSwapper!T bs = void;
-	bs.value = val;
-	return bs.array;
-}
-
-private auto fromBytes(T)(ubyte[] bytes)
-{
-	ByteSwapper!T bs = void;
-	bs.array = bytes;
-	return bs.value;
-}
+import ql = rethinkdb.ql2;
+import rethinkdb.query;
+import rethinkdb.util;
 
 class RethinkConnectionException : RethinkException
 {
@@ -45,8 +27,6 @@ class RethinkConnectionException : RethinkException
 	}
 }
 
-alias QueryResp = void delegate(Json resp);
-
 final class RethinkConnection
 {
 	static struct ConnectionSettings
@@ -55,7 +35,7 @@ final class RethinkConnection
 		ushort port = 28015;
 		string db = "test";
 		string key = ""; // Authentication key
-		Duration timeout = dur!"seconds"(20); // Timeout period in seconds for the connection to be opened
+		Duration timeout = 20.seconds; // Timeout period in seconds for the connection to be opened
 	}
 
 	final static class Builder
@@ -158,17 +138,17 @@ final class RethinkConnection
 
 	@property bool connected() const { return m_transport && m_transport.connected; }
 
-	void runQuery(Json query, scope QueryResp onResp)
+	void runQuery(Query query, scope QueryResp onResp)
 	{
 		assert(connected, "Attempted to run query without connection");
-		auto id = ++m_counter;
+		auto token = ++m_counter;
 		auto queryStr = query.toString();
 		uint queryLen = cast(uint)queryStr.length;
 
-		m_handlers[id] = onResp;
+		m_handlers[token] = onResp;
 
 		ubyte[] message = new ubyte[12 + queryLen];
-		message[0 .. 8] = toBytes!ulong(id);
+		message[0 .. 8] = toBytes!ulong(token);
 		message[8 .. 12] = toBytes!uint(queryLen);
 		message[12 .. $] = cast(ubyte[])queryStr;
 		m_stream.write(message);
@@ -189,13 +169,13 @@ private:
 			if (m_stream.dataAvailableForRead()) {
 				ubyte[12] header;
 				m_stream.read(header);
-				auto id = fromBytes!ulong(header[0 .. 8]);
+				auto token = fromBytes!ulong(header[0 .. 8]);
 				auto size = fromBytes!uint(header[8 .. $]);
-				assert(id in m_handlers, "Unexpected message");
+				assert(token in m_handlers, "Unexpected message");
 				ubyte[] buf = new ubyte[size];
 				m_stream.read(buf);
-				m_handlers[id](parseJsonString((cast(char[])buf).to!string));
-				m_handlers.remove(id);
+				m_handlers[token](parseJsonString((cast(char[])buf).to!string));
+				m_handlers.remove(token);
 			}
 			yield();
 		}

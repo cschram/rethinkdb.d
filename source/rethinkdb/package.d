@@ -37,6 +37,8 @@ unittest
     runTask({
         try {
             runTest();
+        } catch(Throwable e) {
+            logError(e.toString());
         } finally {
             processEvents();
             exitEventLoop(true);
