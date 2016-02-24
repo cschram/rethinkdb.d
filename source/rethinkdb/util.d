@@ -1,5 +1,7 @@
 module rethinkdb.util;
 
+import std.traits;
+
 union ByteSwapper(T)
 {
 	Unqual!T value;

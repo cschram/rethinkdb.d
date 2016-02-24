@@ -19,6 +19,8 @@ import ql = rethinkdb.ql2;
 import rethinkdb.query;
 import rethinkdb.util;
 
+alias QueryResp = void delegate(Json);
+
 class RethinkConnectionException : RethinkException
 {
 	this(string message, string file = __FILE__, int line = __LINE__, Throwable next = null)
@@ -138,7 +140,9 @@ final class RethinkConnection
 
 	@property bool connected() const { return m_transport && m_transport.connected; }
 
-	void runQuery(Query query, scope QueryResp onResp)
+	Query createQuery() { return new Query(++m_counter); }
+
+	void runQuery(Json query, scope QueryResp onResp)
 	{
 		assert(connected, "Attempted to run query without connection");
 		auto token = ++m_counter;
