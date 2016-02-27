@@ -17,19 +17,12 @@ import rethinkdb.client;
 import rethinkdb.exception;
 import ql = rethinkdb.ql2;
 import rethinkdb.query;
+import rethinkdb.term;
 import rethinkdb.util;
 
 alias QueryResp = void delegate(Json);
 
-class RethinkConnectionException : RethinkException
-{
-	this(string message, string file = __FILE__, int line = __LINE__, Throwable next = null)
-	{
-		super(message, file, line, next);
-	}
-}
-
-final class RethinkConnection
+final class Connection
 {
 	static struct ConnectionSettings
 	{
@@ -42,8 +35,6 @@ final class RethinkConnection
 
 	final static class Builder
 	{
-		this(RethinkClient client) pure @safe { m_client = client; }
-
 		Builder hostname(string host) nothrow @safe
 		{
 			m_settings.host = host;
@@ -74,25 +65,22 @@ final class RethinkConnection
 			return this;
 		}
 
-		RethinkConnection createConn()
+		Connection createConn()
 		{
-			return new RethinkConnection(m_client, m_settings);
+			return new Connection(m_settings);
 		}
 
-		ConnectionPool!RethinkConnection connect()
+		ConnectionPool!Connection connect()
 		{
-			m_client.db = m_settings.db;
-			return new ConnectionPool!RethinkConnection(&createConn);
+			return new ConnectionPool!Connection(&createConn);
 		}
 
 	private:
-		RethinkClient m_client;
 		ConnectionSettings m_settings;
 	}
 
-	this(RethinkClient client, in ConnectionSettings settings)
+	this(in ConnectionSettings settings)
 	{
-		m_client = client;
 		m_settings = settings;
 
 		// Connect to server
@@ -114,7 +102,7 @@ final class RethinkConnection
 		// Receive response from the server
 		auto resp = m_stream.readUntil([0]);
 		if (resp != "SUCCESS") {
-			throw new RethinkConnectionException((cast(char[])resp).to!string);
+			throw new RethinkDBConnectionExcpetion((cast(char[])resp).to!string);
 		}
 		logInfo("Connected to RethinkDB server %s:%s", settings.host, settings.port);
 		m_loop = runTask(&readLoop);
@@ -140,32 +128,22 @@ final class RethinkConnection
 
 	@property bool connected() const { return m_transport && m_transport.connected; }
 
-	Query createQuery() { return new Query(++m_counter); }
-
-	void runQuery(Json query, scope QueryResp onResp)
+	Query query(Json tree, Json globalOptArgs)
 	{
-		assert(connected, "Attempted to run query without connection");
+		assert(connected, "Attempted to query without connection");
 		auto token = ++m_counter;
-		auto queryStr = query.toString();
-		uint queryLen = cast(uint)queryStr.length;
-
-		m_handlers[token] = onResp;
-
-		ubyte[] message = new ubyte[12 + queryLen];
-		message[0 .. 8] = toBytes!ulong(token);
-		message[8 .. 12] = toBytes!uint(queryLen);
-		message[12 .. $] = cast(ubyte[])queryStr;
-		m_stream.write(message);
+		auto query = new Query(token, tree, globalOptArgs);
+		m_queries[token] = query;
+		m_stream.write(query.serialize(globalOptArgs));
 	}
 
 private:
-	RethinkClient m_client;
 	const(ConnectionSettings) m_settings;
 	TCPConnection m_transport;
 	Stream m_stream;
 	Task m_loop;
 	ulong m_counter;
-	QueryResp[ulong] m_handlers;
+	Query[ulong] m_queries;
 
 	void readLoop()
 	{
@@ -175,11 +153,17 @@ private:
 				m_stream.read(header);
 				auto token = fromBytes!ulong(header[0 .. 8]);
 				auto size = fromBytes!uint(header[8 .. $]);
-				assert(token in m_handlers, "Unexpected message");
+				assert(token in m_queries, "Unexpected message");
 				ubyte[] buf = new ubyte[size];
 				m_stream.read(buf);
-				m_handlers[token](parseJsonString((cast(char[])buf).to!string));
-				m_handlers.remove(token);
+
+				auto resp = parseJsonString((cast(char[])buf).to!string);
+				// Should check for errors here
+
+				m_queries[token].onResponse(cast(ResponseType)resp.t.get!int, resp.r);
+				if (m_queries[token].state == Query.State.DONE) {
+					m_queries.remove(token);
+				}
 			}
 			yield();
 		}

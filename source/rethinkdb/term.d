@@ -1,39 +1,56 @@
 module rethinkdb.term;
 
 import std.typecons;
+import vibe.core.connectionpool;
 import vibe.data.json;
+import rethinkdb.connection;
 import ql = rethinkdb.ql2;
+import rethinkdb.query;
 
 alias TermType = ql.Term.TermType;
 
-struct Term
+final class Term
 {
-    TermType type;
-    Nullable!Datum datum;
-    Term[] args;
-    Term[string] optArgs;
-
-    this(Datum p_datum)
+    this(Json datum)
     {
-        type = TermType.DATUM;
-        datum = p_datum;
+        m_type = TermType.DATUM;
+        m_datum = datum;
     }
 
-    this(TermType p_type, Term[] p_args=[], Term[string] p_optArgs=[])
+    this(TermType type, Term[] args=[], Term[string] optArgs=[])
     {
-        type = p_type;
-        args = p_args;
-        optArgs = p_optArgs;
+        m_type = type;
+        m_args = args;
+        m_optArgs = optArgs;
     }
 
     Json toJSON()
     {
-        if (type == TermType.DATUM) {
-            assert(!datum.isNull);
-            return datum.toJSON();
+        if (m_type == TermType.DATUM) {
+            return m_datum;
         }
-        return Json([Json(cast(double)type), args.toJSON(), optArgs.toJSON()]);
+        if (m_optArgs.isNull) {
+            return Json([Json(cast(double)m_type), m_args.toJSON()]);
+        }
+        return Json([Json(cast(double)m_type), m_args.toJSON(), m_optArgs.toJSON()]);
     }
+
+    Query run(ConnectionPool!Connection pool, Json globalOptArgs=[])
+    in
+    {
+        assert(globalOptArgs.type == Json.Type.object);
+    }
+    body
+    {
+        auto conn = pool.lockConnection();
+        return conn.query(toJSON(), globalOptArgs);
+    }
+
+private:
+    TermType m_type;
+    Json m_datum;
+    Term[] m_args;
+    Nullable!Term[string] m_optArgs;
 }
 
 Json toJSON(Term[] terms)

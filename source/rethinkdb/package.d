@@ -1,7 +1,15 @@
 module rethinkdb;
 
-public import rethinkdb.client;
 public import rethinkdb.connection;
+public import rethinkdb.datum;
+public import rethinkdb.exception;
+public import rethinkdb.query;
+public import rethinkdb.term;
+
+Connection.Builder connection() pure @safe
+{
+    return new Connection.Builder();
+}
 
 unittest
 {
@@ -11,10 +19,9 @@ unittest
     static if (is(typeof(registerMemoryErrorHandler)))
         registerMemoryErrorHandler();
 
-    alias Conn = LockedConnection!RethinkConnection;
-
-    void testQuery(RethinkClient r, ref Conn conn)
+    void testQuery(ref auto conn)
     {
+        auto term = Term(Datum("foo"));
         auto query = Json([Json(1), Json("foo"), Json.emptyObject]);
         bool done = false;
         conn.runQuery(query, (Json resp) {
@@ -27,11 +34,9 @@ unittest
 
     void runTest()
     {
-        auto r = new RethinkClient();
-        auto pool = r.connection().connect();
+        auto pool = connection().connect();
         auto conn = pool.lockConnection();
-        scope (exit) conn.disconnect();
-        testQuery(r, conn);
+        testQuery(conn);
     }
 
     runTask({
