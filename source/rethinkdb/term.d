@@ -4,6 +4,7 @@ import std.typecons;
 import vibe.core.connectionpool;
 import vibe.data.json;
 import rethinkdb.connection;
+import rethinkdb.datum;
 import ql = rethinkdb.ql2;
 import rethinkdb.query;
 
@@ -11,7 +12,7 @@ alias TermType = ql.Term.TermType;
 
 final class Term
 {
-    this(Json datum)
+    this(Datum datum)
     {
         m_type = TermType.DATUM;
         m_datum = datum;
@@ -24,15 +25,15 @@ final class Term
         m_optArgs = optArgs;
     }
 
-    Json toJSON()
+    Json toJson()
     {
         if (m_type == TermType.DATUM) {
-            return m_datum;
+            return m_datum.toJson;
         }
         if (m_optArgs.isNull) {
-            return Json([Json(cast(double)m_type), m_args.toJSON()]);
+            return Json([Json(cast(double)m_type), m_args.toJson()]);
         }
-        return Json([Json(cast(double)m_type), m_args.toJSON(), m_optArgs.toJSON()]);
+        return Json([Json(cast(double)m_type), m_args.toJson(), m_optArgs.toJson()]);
     }
 
     Query run(ConnectionPool!Connection pool, Json globalOptArgs=[])
@@ -43,30 +44,30 @@ final class Term
     body
     {
         auto conn = pool.lockConnection();
-        return conn.query(toJSON(), globalOptArgs);
+        return conn.query(toJson(), globalOptArgs);
     }
 
 private:
     TermType m_type;
-    Json m_datum;
+    Datum m_datum;
     Term[] m_args;
     Nullable!Term[string] m_optArgs;
 }
 
-Json toJSON(Term[] terms)
+Json toJson(Term[] terms)
 {
     Json r = Json.emptyArray;
     foreach (Term term; terms) {
-        r.appendArrayElement(term.toJSON());
+        r.appendArrayElement(term.toJson());
     }
     return r;
 }
 
-Json toJSON(Term[string] terms)
+Json toJson(Term[string] terms)
 {
     Json r = Json.emptyObject;
     foreach (string name, Term term; terms) {
-        r[name] = term.toJSON();
+        r[name] = term.toJson();
     }
     return r;
 }

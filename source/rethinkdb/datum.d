@@ -1,41 +1,23 @@
+//
+// Datum type definition
+// Currently this is just a wrapper around Vibe.d's Json type, as a stopgap for
+// the future when time and binary psuedotypes are properly supported.
+//
+
 module rethinkdb.datum;
 
 import std.variant;
 import vibe.data.json;
 
-alias Datum = Algebraic!(typeof(null), bool, double, string, This[], This[string]);
+alias Datum = Algebraic!(Json);
 
-Json toJSON(Datum datum)
+Json toJson(Datum value)
 {
-    if (datum.peek!(typeof(null)))
-        return Json(null);
-    else if (datum.peek!bool)
-        return Json(datum.get!bool);
-    else if (datum.peek!double)
-        return Json(datum.get!double);
-    else if (datum.peek!string)
-        return Json(datum.get!string);
-    else if (datum.peek!(Datum[]))
-        return datum.get!(Datum[]).toJSON();
-    else if (datum.peek!(Datum[string]))
-        return datum.get!(Datum[string]).toJSON();
-    return Json(null);
+	return value.get!Json();
 }
 
-Json toJSON(Datum[] datum)
+// In the future this should be generalized to support SysTime, ubyte[], etc.
+Datum toDatum(Json value)
 {
-    Json r = Json.emptyArray;
-    foreach (Datum d; datum) {
-        r.appendArrayElement(d.toJSON());
-    }
-    return r;
-}
-
-Json toJSON(Datum[string] datum)
-{
-    Json r = Json.emptyObject;
-    foreach (string name, Datum d; datum) {
-        r[name] = d.toJSON();
-    }
-    return r;
+	return Datum(value);
 }
