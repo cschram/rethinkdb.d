@@ -10,7 +10,7 @@ import rethinkdb.query;
 
 alias TermType = ql.Term.TermType;
 
-final class Term
+struct Term
 {
     this(Datum datum)
     {
@@ -18,7 +18,13 @@ final class Term
         m_datum = datum;
     }
 
-    this(TermType type, Term[] args=[], Term[string] optArgs=[])
+    this(TermType type, Term[] args)
+    {
+        m_type = type;
+        m_args = args;
+    }
+
+    this(TermType type, Term[] args, Term[string] optArgs)
     {
         m_type = type;
         m_args = args;
@@ -54,7 +60,7 @@ private:
     Nullable!Term[string] m_optArgs;
 }
 
-Json toJson(Term[] terms)
+Json toJson(ref Term[] terms)
 {
     Json r = Json.emptyArray;
     foreach (Term term; terms) {
@@ -63,11 +69,16 @@ Json toJson(Term[] terms)
     return r;
 }
 
-Json toJson(Term[string] terms)
+Json toJson(ref Term[string] terms)
 {
     Json r = Json.emptyObject;
     foreach (string name, Term term; terms) {
         r[name] = term.toJson();
     }
     return r;
+}
+
+Term db(string name)
+{
+    return Term(TermType.DB, [Term()])
 }

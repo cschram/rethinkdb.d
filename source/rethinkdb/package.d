@@ -6,11 +6,6 @@ public import rethinkdb.exception;
 public import rethinkdb.query;
 public import rethinkdb.term;
 
-Connection.Builder connection() pure @safe
-{
-    return new Connection.Builder();
-}
-
 unittest
 {
     import vibe.d;

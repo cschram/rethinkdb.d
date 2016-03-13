@@ -1,9 +1,9 @@
 module rethinkdb.connection;
 
-import core.time;
 import std.algorithm;
 import std.bitmanip;
 import std.conv;
+import std.datetime;
 import std.traits;
 
 import vibe.core.connectionpool;
@@ -20,17 +20,17 @@ import rethinkdb.query;
 import rethinkdb.term;
 import rethinkdb.util;
 
-alias QueryResp = void delegate(Json);
-
 final class Connection
 {
-	static struct ConnectionSettings
+	static struct Settings
 	{
 		string host = "localhost";
 		ushort port = 28015;
 		string db = "test";
-		string key = ""; // Authentication key
-		Duration timeout = 20.seconds; // Timeout period in seconds for the connection to be opened
+		// Authentication key
+		string key = "";
+		// Timeout period in seconds for the connection to be opened
+		Duration timeout = 20.seconds;
 	}
 
 	final static class Builder
@@ -65,21 +65,15 @@ final class Connection
 			return this;
 		}
 
-		Connection createConn()
-		{
-			return new Connection(m_settings);
-		}
-
-		ConnectionPool!Connection connect()
-		{
-			return new ConnectionPool!Connection(&createConn);
-		}
+		ConnectionPool!Connection connect() { return new ConnectionPool!Connection(&createConn); }
 
 	private:
-		ConnectionSettings m_settings;
+		Settings m_settings;
+
+		Connection createConn() { return new Connection(m_settings); }
 	}
 
-	this(in ConnectionSettings settings)
+	this(in Settings settings)
 	{
 		m_settings = settings;
 
@@ -115,18 +109,11 @@ final class Connection
 
 	void disconnect()
 	{
-		if (m_stream) {
-			m_stream.finalize();
-			m_stream = null;
-		}
-
-		if (m_transport) {
-			m_transport.close();
-			m_transport = null;
-		}
+		m_stream.finalize();
+		m_transport.close();
 	}
 
-	@property bool connected() const { return m_transport && m_transport.connected; }
+	@property bool connected() const { return m_transport.connected; }
 
 	Query query(Json tree, Json globalOptArgs)
 	{
@@ -138,7 +125,7 @@ final class Connection
 	}
 
 private:
-	const(ConnectionSettings) m_settings;
+	const(Settings) m_settings;
 	TCPConnection m_transport;
 	Stream m_stream;
 	Task m_loop;
@@ -147,6 +134,7 @@ private:
 
 	void readLoop()
 	{
+		yield(); // There isn't going to be any incoming data immediately
 		while(connected) {
 			if (m_stream.dataAvailableForRead()) {
 				ubyte[12] header;
@@ -168,4 +156,9 @@ private:
 			yield();
 		}
 	}
+}
+
+Connection.Builder connection() pure @safe
+{
+    return new Connection.Builder();
 }
